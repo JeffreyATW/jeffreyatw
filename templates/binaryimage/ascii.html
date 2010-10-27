@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+body {
+    width: 960px;
+}
+
+p#ascii {
+    word-wrap: break-word;
+}
+
+p#binary {
+    font-family: monospace;
+}
+
+img {
+    border: 5px solid #ccc;
+}
+
+#error {
+    color: red;
+}
+</style>
+<script type="text/javascript" src="http://jeffreyatw.com/static/js/jquery.js"></script>
+<script type="text/javascript">
+<!--
+  var img;
+  var can = $('<canvas>')[0];
+  var ctx = can.getContext('2d');
+  var p1;
+  var p2;
+
+  $(document).ready(function() {
+    img = $('img')[0];
+    $('img').attr('src', "data:{{content_type}};base64,{{data|safe}}");
+    p1 = $('p#binary');
+    p2 = $('p#ascii');
+    img.onload = function() {
+      can.width = img.width;
+      can.height = img.height;
+      ctx.drawImage(img, 0, 0, img.width, img.height);
+      var imagedata = ctx.getImageData(0, 0, img.width, img.height);
+      var data = imagedata.data;
+      var p1text = "";
+      for (var i = 0; i < data.length; i += 4) {
+        if (data[i] + data[i+1] + data[i+2] > 382) {
+          p1text = p1text + '0';
+        } else {
+          p1text = p1text + '1';
+        }
+        if (((i/4) + 1) % img.width == 0) {
+            p1text = p1text + '<br>';
+        }
+      }
+      p1.html(p1text);
+      p1text = p1.text();
+      var p2text = "";
+      for (var i = 0; i < p1text.length; i += 8) {
+        var decimal = parseInt(p1text.substr(i, 8), 2);
+        if (decimal != 0) {
+            p2text = p2text + '&#' + decimal + ';';
+        }
+        if (decimal > 31 && decimal != 127) {
+            $('#error').text('Warning: output contains non-printable characters!');
+        }
+      }
+      p2.html(p2text);
+    }
+  });
+-->
+</script>
+</head>
+<body>
+<h1>Image</h1>
+<img>
+<h1>Binary</h1>
+<p id="binary"></p>
+<h1>Ascii</h1>
+<div id="error"></div>
+<p id="ascii"></p>
+</body>

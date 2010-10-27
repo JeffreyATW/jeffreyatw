@@ -1,0 +1,21 @@
+{% extends "car/base.html" %}
+{% block content %}
+{% if object %}
+{% include "car/characters/base.html" %}
+<div class="character-content">
+<h2>{{ object.name }}</h2>
+<p>
+{{ object.content|safe }}
+</p>
+<ul>
+{% for comic in object.all_appearances %}
+<li><a href="/car/{{ comic.pub_date }}">{{ comic }}</a></li>
+{% endfor %}
+</ul>
+</div>
+<div class="character-clear">
+</div>
+{% else %}
+    <p>Character doesn't exist!</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends "car/base.html" %}
+{% if object %}
+{% block title %}{{ object }}{% endblock %}
+{% block scripts %}
+	<script type="text/javascript" src="/car/media/js/calendar/calendar.js"></script>
+	<script type="text/javascript" src="/car/media/js/calendar/lang/calendar-en.js"></script>
+	<script type="text/javascript" src="/car/media/js/calendar/calendar-setup.js"></script>
+	<script type="text/javascript" src="/car/js/calendar.js"></script>
+	<script type="text/javascript" src="/car/media/js/audio-player/audio-player.js"></script>
+	<script type="text/javascript" src="/static/js/jquery.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.scrollTo-min.js"></script>
+	<script type="text/javascript">
+	//<![CDATA[
+	AudioPlayer.setup("/car/media/js/audio-player/player.swf", {  
+	{% if play %}
+	autostart: "yes",
+	{% endif %}
+	animation: "no",
+	noinfo: "yes",
+	initialvolume: 100,
+	width: 500
+	});  
+
+	var RecaptchaOptions = {
+		theme : 'clean'
+	};
+
+	window.onload=function() {
+	document.getElementById('nav-left').style.height=
+	document.getElementById('nav-right').style.height=
+	document.getElementById('comic').offsetHeight+"px";
+
+	  Calendar.setup(
+		{
+		  flat           : "calendar",
+		  flatCallback   : dateChanged,
+		  weekNumbers    : false,
+		  range          : [{{ range }}],
+		  date           : new Date({{ object.pub_date|date:"Y" }}, {{ object.pub_date|date:"m" }}-1, {{ object.pub_date|date:"d" }}),
+		  dateStatusFunc : dateStatusHandler
+		}
+	  );
+	}
+
+	img1 = new Image();
+	img1.src = "/car/media/layout/arrow-left-animated.gif";
+
+	img2 = new Image();
+	img2.src = "/car/media/layout/arrow-right-animated.gif";
+
+	$(document).ready(function() {
+	    $('#theForm').submit(function() {
+			$.post(
+                $('#theForm').attr('action'),
+			    $('#theForm').serialize(),
+                function(data) { 
+                    if ($('#error'))
+                    {
+                        $('#error').remove();
+                    }
+                    if (data.error)
+                    {
+                        var errorDiv = $('<div id="error"/>');
+                        errorDiv.html(data.error);
+                        $('#newComments').append(errorDiv);
+                    }
+                    else
+                    {
+				        document.theForm.reset();
+                        var newComment = $('<div class="comment"/>');
+                        var commentAttributes = $('<div class="comment-attributes"/>');
+                        var commentName = $('<div class="comment-name"/>');
+                        if (data.website)
+                        {
+                            var websiteLink = $('<a/>');
+                            websiteLink.attr('href', data.website);
+                            websiteLink.text(data.name);
+                            commentName.append(websiteLink);
+                        }
+                        else
+                        {
+                            commentName.text(data.name);
+                        }
+                        var commentDate = $('<div class="comment-date"></div>');
+                        commentDate.text(data.pub_date);
+                        commentAttributes.append(commentName);
+                        commentAttributes.append(commentDate);
+                        var hr = $('<hr/>');
+                        newComment.append(commentAttributes);
+                        newComment.append(data.content);
+                        newComment.append(hr);
+                        $('#newComments').append(newComment);
+                        $(newComment).slideToggle();
+                        $.scrollTo(newComment);
+                    }
+                },
+                'json'
+            );
+			Recaptcha.reload();
+            return false;
+		});
+	});
+
+	AudioPlayer.embed("audioplayer", {soundFile: music});
+
+	var dates = new Array({{ dates }});
+	  
+    function dateChanged(calendar) {
+		if (calendar.dateClicked) {
+		  var y = calendar.date.getFullYear();
+		  var m = padDate(calendar.date.getMonth()+1);
+		  var d = padDate(calendar.date.getDate());
+		  window.location = "/car/" + y + "-" + m + "-" + d;
+		}
+	  };
+	  
+	function padDate(date)
+	{
+	  if (date < 10)
+	  {
+		date = "0" + date;
+	  }
+	  return date;
+	}
+  
+	function dateIsSpecial(date) {
+		var formattedDate = (date.getFullYear() * 10000) + ((date.getMonth()+1) * 100) + (date.getDate());
+		if (dates.indexOf(formattedDate) > -1) return true;
+		return false;
+	}
+
+	function dateStatusHandler(date, y, m, d) {
+		if (dateIsSpecial(date)) return false;
+		else return true;
+	}
+		
+	//]]>
+	</script>
+{% endblock %}
+        {% block content %}      
+		{% block comic %}
+        {% block player %}
+		  <div id="player">
+			{% if object.music %}
+			<p>Today's Track: <strong>{{ object.music_title }}</strong></p>
+			<p id="audioplayer">Audio Player</p>
+			{% endif %}
+		  </div>
+		{% endblock player %}
+		<div class="comic-nav comic-top">
+			{% if object.get_previous_entry %}
+			<div class="comic-previous"><a href="/car/{{ object.get_previous_entry.pub_date }}"><span>Previous</span></a></div>
+			{% endif %}
+			{% if object.get_next_entry %}
+			<div class="comic-next"><a href="/car/{{ object.get_next_entry.pub_date }}"><span>Next</span></a></div>
+			{% endif %}
+		</div>
+		  <div style="clear: both"></div>
+		  <div class="navigation" id="nav-right">
+			{% if object.get_next_entry %}
+			<a href="/car/{{ object.get_next_entry.pub_date }}"><span>Previous Comic</span></a>
+			{% endif %}
+		  </div>
+		  <div class="navigation" id="nav-left">
+			{% if object.get_previous_entry %}
+			<a href="/car/{{ object.get_previous_entry.pub_date }}"><span>Next Comic</span></a>
+			{% endif %}
+		  </div>
+		  <div id="comic"> {{ object.content|safe }} </div>
+		  <div class="comic-nav comic-bottom">
+			{% if object.get_previous_entry %}
+			<div class="comic-previous"><a href="/car/{{ object.get_previous_entry.pub_date }}"><span>Previous</span></a></div>
+			{% endif %}
+			{% if object.get_next_entry %}
+			<div class="comic-next"><a href="/car/{{ object.get_next_entry.pub_date }}"><span>Next</span></a></div>
+			{% endif %}
+		  </div>
+        {% endblock %}
+		{% block footer %}
+		<div id="footer">
+		{% if links %}
+    <div id="links">
+      <h2>Awesomelinks</h2>
+      <div class="link"><a href="http://www.achewood.com/" target="_blank" >Achewood</a></div>
+      <div class="link"><a href="http://anderslovesmaria.reneengstrom.com/" target="_blank" >Anders Loves Maria</a></div>
+      <div class="link"><a href="http://www.qwantz.com/" target="_blank" >Dinosaur Comics</a></div>
+      <div class="link"><a href="http://www.drmcninja.com/" target="_blank" >Dr. McNinja</a></div>
+      <div class="link"><a href="http://www.eegra.com/" target="_blank" >Eegra</a></div>
+      <div class="link"><a href="http://www.fanboys-online.com/" target="_blank" >F@NB0Y$</a></div>
+      <div class="link"><a href="http://www.gastrophobia.com/" target="_blank" >GastroPhobia</a></div>
+      <div class="link"><a href="http://www.girlyyy.com/" target="_blank" >Girly</a></div>
+      <div class="link"><a href="http://www.gunnerkrigg.com/" target="_blank" >Gunnerkrigg Court</a></div>
+      <div class="link"><a href="http://www.chickensnack.com/comics/lr/" target="_blank" >Left &amp; Right</a></div>
+      <div class="link"><a href="http://nobodyscores.loosenutstudio.com/" target="_blank" >Nobody Scores!</a></div>
+      <div class="link"><a href="http://www.nockforce.com/" target="_blank" >nockFORCE</a></div>
+      <div class="link"><a href="http://www.octopuspie.com/" target="_blank" >Octopus Pie</a></div>
+      <div class="link"><a href="http://www.ourhomeplanet.net/" target="_blank" >Our Home Planet</a></div>
+      <div class="link"><a href="http://www.overcompensating.com/" target="_blank" >Overcompensating</a></div>
+      <div class="link"><a href="http://www.picturesforsadchildren.com/" target="_blank" >Pictures for Sad Children</a></div>
+      <div class="link"><a href="http://capn-special.livejournal.com/" target="_blank" >Rumblo</a></div>
+      <div class="link"><a href="http://www.samandfuzzy.com/" target="_blank" >Sam and Fuzzy</a></div>
+      <div class="link"><a href="http://www.scarygoround.com/" target="_blank" >Scary Go Round</a></div>
+      <div class="link"><a href="http://www.shortpacked.com/" target="_blank" >Shortpacked</a></div>
+      <div class="link"><a href="http://www.slowwave.com/" target="_blank" >Slow Wave</a></div>
+      <div class="link"><a href="http://www.wigu.com/" target="_blank" >Wigu</a></div>
+    </div>
+    {% endif %}
+    <div id="calendar"></div>
+    <div id="comments-section"> <a id="comments" />
+      <h1>Comments</h1>
+      {% if object.panels and object.characters.count %}
+      <div class="comment">
+          <div class="comment-attributes">
+            <div class="comment-name"> <a href="http://www.jeffreyatw.com/car/2008-09-05">{{ object.fake_nickname }}</a> </div>
+            <div class="comment-date"> {{ object.fake_date }} </div>
+          </div>
+          {{ object.fake_content }}
+          <hr />
+      </div>
+      {% endif %}
+      {% for comment in object.get_comments %}
+      {% if comment.enabled %}
+      <div class="comment">
+          <div class="comment-attributes">
+            <div class="comment-name">
+              {% if comment.website %}
+              <a href="{{ comment.website }}">
+              {% endif %}
+              {{ comment.name }}
+              {% if comment.website %}
+              </a>
+              {% endif %}
+            </div>
+            <div class="comment-date"> {{ comment.pub_date|date:"F d, Y g:i A" }} </div>
+          </div>
+          {{ comment.content|safe }}
+          <hr />
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% comment %}
+      <div id="newComments">
+      </div>
+      <h2>Add a Comment</h2>
+      <form method="post" id="theForm" name="theForm" action="/car/{{ object.pub_date }}">
+        <div id="newcomment">
+          {% if failure %}
+        <div class="commentlabel">
+          <strong>Posting failed! Make sure you entered a name, some content, and the correct CAPTCHA.</strong>
+          </div>
+          {% endif %}
+        {% for field in form %}
+        <div class="commentlabel">{{ field.label_tag }}</div>
+        <div>
+            {{ field }}
+        </div>
+        {% endfor %}
+        <div class="commentlabel">
+            Type the two words
+        </div>
+        <div>
+            {{ captcha.captcha }}
+        </div>
+        <div class="commentlabel">
+            <input type="submit" value="Submit" />
+          </div>
+        </div>
+      </form>
+      {% endcomment %}
+      <p>Comments are closed. Thanks for playing!</p>
+    </div>
+  </div>
+		{% endblock footer %}
+		{% endblock content %}
+{% else %}
+    <p>Comic doesn't exist!</p>
+{% endif %}

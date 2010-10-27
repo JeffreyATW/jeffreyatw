@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+    body {
+        width: 960px;
+    }
+
+    #error {
+        color: red;
+    }
+    </style>
+</head>
+<body>
+    <div id="error">{{ error }}</div>
+    <h1>Convert text to a binary image</h1>
+    <form action="binary" method="post">
+        <label for="text">Enter text:</label>
+        <textarea name="text" id="text"></textarea>
+        <br>
+        <input type="submit">
+    </form>
+    <h1>Convert a binary image to text</h1>
+    <form action="ascii" enctype="multipart/form-data" method="post">
+        <label for="file">Upload image:</label>
+        <input type="file" id="file" name="file">
+        <br>
+        <input type="submit">
+    </form>
+</body>

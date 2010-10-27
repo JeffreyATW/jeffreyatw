@@ -1,0 +1,23 @@
+{% if object.image_name %}
+<div class="character-image">
+<img src="/car/media/characters/{{ object.image_name }}" alt="{{ object.name }}'s Image" />
+</div>
+{% endif %}
+{% if object.photo_name %}
+<div class="character-photo">
+<img src="/car/media/characters/{{ object.photo_name }}" alt="{{ object.name }}'s Photo" />
+</div>
+{% endif %}
+<div class="character-content">
+<h2>{{ object.name }}</h2>
+<p>
+{{ object.content|safe }}
+</p>
+<?php if ($comic) { ?><p>
+<em>First Appearance:</em> <a href="index.php?date=<?php echo $comic->getDate(); ?>"><?php echo generateTitle($comic); ?></a>
+</p>
+<?php if (!$list) { ?>
+<p><a href="/car/characters/{{ object.id }}">List All Appearances</a></p>
+<?php } } ?>
+</div>
+<div class="character-clear">

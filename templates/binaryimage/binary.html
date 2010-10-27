@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+body {
+    width: 960px;
+}
+
+p#ascii, p#binary {
+    word-wrap: break-word;
+}
+
+p#binary {
+    font-family: monospace;
+}
+
+img {
+    border: 5px solid #ccc;
+}
+</style>
+<script type="text/javascript" src="http://jeffreyatw.com/static/js/jquery.js"></script>
+<script type="text/javascript">
+<!--
+  var can = $('<canvas>')[0];
+  var ctx = can.getContext('2d');
+  var p1;
+  var p2;
+  var ascii;
+  var binary = "";
+
+  $(document).ready(function() {
+    p1 = $('p#ascii');
+    p2 = $('p#binary');
+    ascii = p1.text();
+
+    for (var i = 0; i < ascii.length; i++) {
+        var decimal = ascii.charCodeAt(i);
+        if (decimal < 256) {
+            x2 = decimal;
+            log2 = 0;
+
+            while (x2 >= 2) {
+                x2 = x2/2;
+                log2 = log2 + 1;
+            }
+
+            var answer = [];
+     
+            for(var l2 = log2; l2 >= 0; l2--) {
+                power = Math.pow(2, l2);
+                if (decimal >= power) {
+                    answer[l2] = "1";
+                    decimal = decimal - power;
+                }       
+                else answer[l2] = "0";
+            }
+
+            for (var j = 7; j >= 0; j--){
+                if (answer[j] == undefined) {
+                    binary = binary + "0";
+                }
+                else binary = binary + answer[j];    
+            }
+        }
+    }
+    
+    p2.html(binary);
+
+    if (binary.length > 0) {
+        can.width = Math.ceil(Math.sqrt(binary.length));
+        can.height = Math.ceil(Math.sqrt(binary.length));
+        var imagedata = ctx.getImageData(0, 0, can.width, can.height);
+        for (var i = 0; i < imagedata.data.length; i += 4) {
+            if (binary[i/4] == "0" || binary[i/4] == undefined) {
+                imagedata.data[i] = imagedata.data[i+1] = imagedata.data[i+2] = 255;
+            }
+            imagedata.data[i+3] = 255;
+        }
+        ctx.putImageData(imagedata, 0, 0);
+
+        $('img').attr('src', can.toDataURL("image/png"));
+    } else {
+        $('img').replaceWith('<p>No ASCII input detected.</p>');
+    }
+});
+-->
+</script>
+</head>
+<body>
+<h1>Text</h1>
+<p id="ascii">{{ascii}}</p>
+<h1>Binary</h1>
+<p id="binary"></p>
+<h1>Image</h1>
+<img src="">
+</body>

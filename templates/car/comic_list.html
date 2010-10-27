@@ -1,0 +1,11 @@
+{% extends 'car/base.html' %}
+
+{% block content %}
+{% if object_list %}
+<ul>
+{% for object in object_list %}
+<li><a href="/car/{{ object.pub_date }}">{{ object }}</a> - {{ object.pub_date|date:"F j, Y" }}</li>
+{% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

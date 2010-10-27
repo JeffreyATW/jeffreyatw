@@ -1,0 +1,10 @@
+{% if object.image_name %}
+<div class="character-image">
+<img src="/car/media/characters/{{ object.image_name }}" alt="{{ object.name }}'s Image" />
+</div>
+{% endif %}
+{% if object.photo_name %}
+<div class="character-photo">
+<img src="/car/media/characters/{{ object.photo_name }}" alt="{{ object.name }}'s Photo" />
+</div>
+{% endif %}

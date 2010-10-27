@@ -1,0 +1,24 @@
+{% extends "car/base.html" %}
+{% block content %}
+{% if object_list %}
+{% for object in object_list %}
+{% include "car/characters/base.html" %}
+<div class="character-content">
+<h2>{{ object.name }}</h2>
+<p>
+{{ object.content|safe }}
+</p>
+
+{% if object.first_appearance %}
+<p>
+<em>First Appearance:</em> <a href="/car/{{ object.first_appearance.pub_date }}">{{ object.first_appearance }}</a>
+</p>
+<p><a href="/car/characters/{{ object.id }}">List All Appearances</a></p>
+{% endif %}
+</div>
+<div class="character-clear"></div>
+{% endfor %}
+{% else %}
+    <p>No characters are available.</p>
+{% endif %}
+{% endblock %}

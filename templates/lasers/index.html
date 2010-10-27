@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Lasers</title>
+<style type="text/css">
+    body {
+        overflow: hidden;
+    }
+
+    .dot {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        border-radius: 5px;
+        background-color: #f00;
+    }
+    
+    .dot div {
+        margin-top: 10px;
+        width: 200px;
+    }
+</style>
+<script type="text/javascript" src="http://jeffreyatw.com/js/jquery.js" charset="UTF-8"></script>
+<script type="text/javascript">
+<!--
+
+var posx = 0;
+var posy = 0;
+var changed = true;
+var unchangedCount = 0;
+var data;
+
+function getMouseXY(e) {
+    var newPosx = 0;
+    var newPosy = 0;
+    if (!e) e = window.event;
+    if (e.pageX || e.pageY) {
+        newPosx = e.pageX;
+        newPosy = e.pageY;
+    }
+    else if (e.clientX || e.clientY) {
+        newPosx = e.clientX + document.body.scrollLeft
+            + document.documentElement.scrollLeft;
+        newPosy = e.clientY + document.body.scrollTop
+            + document.documentElement.scrollTop;
+    }
+    if (posx != newPosx || posy != newPosy) {
+        posx = newPosx;
+        posy = newPosy;
+        changed = true;
+        unchangedCount = 0;
+    } else {
+        changed = false;
+    }
+}
+
+function refreshDots(newData) {
+    data = newData
+    if (data != null) {
+        for (session in data) {
+            if ($('#'+data[session].session_key).length == 0) {
+                $('body').append('<div id="'+data[session].session_key+'" class="dot new" style="left: '+data[session].x+'px; top: '+data[session].y+'px;"><div>'+data[session].name+'</div></div>');
+            } else {
+                $('#'+data[session].session_key).animate({left: data[session].x+'px', top: data[session].y+'px'}, {duration:100,queue:false});
+                $('#'+data[session].session_key).text(data[session].name);
+                $('#'+data[session].session_key).css('background-color', 'rgb('+data[session].r+','+data[session].g+','+data[session].b+')');
+                $('#'+data[session].session_key).addClass('new');
+            }
+        }
+        $('.dot:not(.new)').remove();
+        $('.dot.new').removeClass('new');
+    }
+}
+
+$(document).ready(function() {
+    document.onmousemove = getMouseXY;
+    setInterval(function() {
+        if (unchangedCount <= 1000) {
+            if (changed) {
+                $.post(
+                    'coords',
+                    {
+                        'x':posx,
+                        'y':posy,
+                        'name':$('input#name').val(),
+                        'r':$('input#r').val(),
+                        'g':$('input#g').val(),
+                        'b':$('input#b').val()
+                    },
+                    function(newData) {
+                        refreshDots(newData);
+                    },
+                    'json'
+                );
+                changed = false;
+            } else {
+                $.get(
+                    'coords',
+                    function(newData) {
+                        refreshDots(newData);
+                    },
+                    'json'
+                );
+                unchangedCount++;
+            }
+            $('.error').remove();
+        } else {
+            if ($('.error').length < 0) {
+                $('body').append('<div class="error">You have been disconnected for inactivity. Move your mouse to reconnect.</div>');
+            }
+        }
+    }, 100);
+});
+
+-->
+</script>
+</head>
+<body>
+<label for="name">name:</label> <input id="name" type="text" />
+<label for="r">r:</label> <input id="r" type="text" value="255" />
+<label for="g">g:</label> <input id="g" type="text" value="0" />
+<label for="b">b:</label> <input id="b" type="text" value="0" />
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Jeffrey Carl Faden's Portfolio</title>
+        <link rel="stylesheet" type="text/css" href="/static/portfolio/css/portfolio.css" />
+        <script type="text/javascript">
+            <!--
+            /* This stylesheet will hide elements for those with JavaScript enabled */
+            document.write('<link rel=\"stylesheet\" href=\"/static/portfolio/css/portfolio-extra.css\" />');
+            -->
+        </script>
+        <script type="text/javascript" src="/static/js/jquery.js" charset="UTF-8"></script>
+        <script type="text/javascript" src="/static/js/jquery-color.js" charset="UTF-8"></script>
+        <script type="text/javascript" src="/static/js/portfolio.js" charset="UTF-8"></script>
+    </head>
+    <body>
+<div id="page">
+        <h1>Jeffrey Carl Faden</h1>
+        <ul id="contents">
+            {% for section in sections %}
+            <li class="section">
+                <h2>{{ section.name }}</h2>
+                <ul class="entries">
+                    {% for entry in section.get_entries %}
+                        {% ifequal entry.name 'Contact' %}
+                            <li class="entry open">
+                                <div class="description visible">
+                                    {{ entry.description|safe }}
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="entry">
+                                <h3>{{ entry.name }}</h3>
+                                <div class="description">
+                                    {% if entry.image %}
+                                        <a href="{{ entry.url }}" class="imageLink" target="_blank">
+                                            <img src="/static/{{ entry.image }}" alt="{{ entry.name }}" />
+                                        </a>
+                                    {% endif %}
+                                    {{ entry.description|safe }}
+                                    <p><em>{{ entry.pub_date|date:"F Y" }}</em></p>
+                                    {% ifnotequal entry.name "Portfolio 2009-2010" %}
+                                        <a class="cta" href="{{ entry.url }}" target="_blank">Visit {{ entry.name }}</a>
+                                    {% endifnotequal %}
+                                </div>
+                            </li>
+                        {% endifequal %}
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ul>
+</div>
+    <div id="notice">
+        <div id="arrow">
+            &lt;
+        </div>
+        <div id="noticetext">
+            Click my name to expand.
+        </div>
+    </div>
+</body>
+</html>

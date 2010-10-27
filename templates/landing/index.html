@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="Description" content="Jeffrey Carl Faden's personal website." />
+    <meta name="author" content="Jeffrey Carl Faden" />
+    <meta name="Keywords" content="JeffreyATW, web development, comics, music, midi, blog" />
+    <title>JeffreyATW.com</title>
+    <link href='http://fonts.googleapis.com/css?family=Nobile:regular,bold' rel='stylesheet' type='text/css'>
+    <link href="/static/v13/css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="openid.server" href="http://www.livejournal.com/openid/server.bml" />
+    <link rel="openid.delegate" href="http://www.livejournal.com/users/jeffreyatw/" />
+    <link rel="meta" type="application/rdf+xml" title="FOAF" href="http://www.livejournal.com/users/jeffreyatw/data/foaf" />
+    <link rel="alternate" type="application/rss+xml" title="RSS" href="http://jeffreyatw.livejournal.com/data/rss" />
+    <link rel="alternate" type="application/atom+xml" title="Atom" href="http://jeffreyatw.livejournal.com/data/atom" />
+    <link rel="service.feed" type="application/atom+xml" title="AtomAPI-enabled feed" href="http://www.livejournal.com/interface/atom/feed" />
+    <link rel="service.post" type="application/atom+xml" title="Create a new post" href="http://www.livejournal.com/interface/atom/post" />
+    <link rel="icon" href="/static/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon">
+    <script type="text/javascript" src="/js/jquery.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://twitter.com/statuses/user_timeline/jeffreyatw.json?callback=twitterCallback&amp;named_obj"></script>
+    <script type="text/javascript" src="/static/v13/js/modernizr-1.5.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="/static/v13/js/script.js" charset="utf-8"></script>
+    <script defer="defer" type="text/javascript" src="/v12/pngfix.js"></script>
+    <script type="text/javascript">
+
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-134118-2']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+    </script>
+  </head>
+  <body>
+    <h1>JeffreyATW</h1>
+    <nav>
+      <ul>
+        <li class="about"><a href="http://www.google.com/profiles/jeffreyatw#about"><span>About</span></a></li>
+        <li class="portfolio"><a href="http://jeffreycarlfaden.com"><span>Portfolio</span></a></li>
+        <li class="twitter"><a href="http://www.twitter.com/jeffreyatw"><span>Twitter</span></a></li>
+        <li class="facebook"><a href="http://www.facebook.com/jeffreyatw"><span>Facebook</span></a></li>
+        <li class="journal"><a href="http://jeffreyatw.livejournal.com"><span>Journal</span></a></li>
+        <li class="archive"><span>Archive</span></li>
+      </ul>
+    </nav>
+    <article>
+      <section class="about">
+        <h2>About</h2>
+        <img src="/static/v13/img/portrait.jpg" alt="Portrait" class="border">
+        <p>I'm a web developer living in San Francisco. I enjoy nostalgia, biking, video games, web standards, good ingredients, webcomics, and making music.</p>
+      </section>
+      <section class="portfolio">
+        <h2>Portfolio</h2>
+        <ul>
+          {% for section in sections %}
+            <li>{{ section }}</li>
+          {% endfor %}
+        </ul>
+      </section>
+      <section class="twitter">
+        <h2>Twitter</h2>
+        	<ul>
+        	</ul>
+      </section>
+      <section class="facebook right">
+        <h2>Facebook</h2>
+        <a href="http://www.facebook.com/jeffreyatw" target="_TOP" title="Jeffrey Carl Faden">
+          <img src="http://badge.facebook.com/badge/6703168.141.1162389104.png" class="border" />
+        </a>
+      </section>
+      <section class="journal right">
+        <h2>Journal</h2>
+        <ul>
+        </ul>
+      </section>
+      <section class="archive right">
+        <h2>Archive</h2>
+        <ul>
+          <li><a href="/static/comics.shtml">Comics</a> - some old comics I've done</li>
+          <li><a href="/static/ddr_sims.shtml">Simfiles</a> - beatmania and DDR simfiles</li>
+          <li><a href="http://jeffreyatw.deviantart.com">Art</a> - an old art gallery</li>
+          <li><a href="/static/midi.shtml">Midi</a> - my midi transcriptions and compositions</li>
+        </ul>
+        <h3>Previous Site Versions</h3>
+        <ul id="versionlist">
+          <li><a href="http://sentra.tripod.com">v1</a></li>
+          <li><a href="/index_v2.shtml">v2</a></li>
+          <li><a href="/index_v3.shtml">v3</a></li>
+          <li><a href="/index_v4.shtml">v4</a></li>
+          <li><a href="/index_v5.shtml">v5</a></li>
+          <li><a href="/index_v6.shtml">v6</a></li>
+          <li><a href="http://www.livejournal.com/customview.cgi?styleid=419413&amp;user=jeffreyatw">v7</a></li>
+          <li><a href="http://www.livejournal.com/customview.cgi?styleid=481429&amp;user=jeffreyatw">v8</a></li>
+          <li><a href="http://www.livejournal.com/customview.cgi?styleid=497465&amp;user=jeffreyatw">v9</a></li>
+          <li><a href="http://www.livejournal.com/customview.cgi?styleid=565270&amp;user=jeffreyatw">v10</a></li>
+          <li><a href="/v11/">v11</a></li>
+          <li><a href="/v12/">v12</a></li>
+        </ul>
+      </section>
+    </article>
+  </body>
+</html>
